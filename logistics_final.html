@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infographic Logistics Việt Nam 2030 - Noto Sans Parallel</title>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Noto Sans', sans-serif; 
+            background-color: #ffffff;
+            margin: 0;
+            padding: 0;
+        }
+        
+        /* Cỡ chữ chuẩn PPT theo yêu cầu:
+           21pt ~ 28px (Tiêu đề vùng)
+           18pt ~ 24px (Tên dự án)
+           12pt ~ 16px (Nội dung & Kết nối)
+        */
+        .text-size-region { font-size: 28px; font-weight: 900; line-height: 1.2; }
+        .text-size-project { font-size: 24px; font-weight: 700; line-height: 1.2; }
+        .text-size-detail { font-size: 16px; font-weight: 400; line-height: 1.6; }
+        .text-size-link { font-size: 16px; font-weight: 700; line-height: 1.2; }
+
+        .modal-fade-in { animation: fadeIn 0.3s ease-out; }
+        .modal-zoom-in { animation: zoomIn 0.2s ease-out; }
+        
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes zoomIn { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+        .border-left-custom { border-left-width: 12px; }
+    </style>
+</head>
+<body class="bg-slate-50">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState } = React;
+
+        const ShipIcon = () => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1 .6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/>
+                <path d="M19.38 20A11.6 11.6 0 0 0 21 14l-9-4-9 4c0 2.26 1.15 4.7 2.3 6"/>
+                <path d="M11 13V7a2 2 0 0 1 2-2h4"/><path d="M11 19h2"/>
+            </svg>
+        );
+
+        const PlaneIcon = () => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/>
+            </svg>
+        );
+
+        const FTZIcon = () => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>
+            </svg>
+        );
+
+        const LinkIcon = () => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="m16 3 4 4-4 4"/><path d="M20 7H4"/><path d="m8 21-4-4 4-4"/><path d="M4 17h16"/>
+            </svg>
+        );
+
+        const App = () => {
+            const [selectedProject, setSelectedProject] = useState(null);
+
+            const regions = [
+                {
+                    id: "north",
+                    name: "Hành lang miền Bắc",
+                    color: "#1e3a8a",
+                    projects: [
+                        { name: "Cảng Lạch Huyện (Bến 3-8)", type: "port", info: "Vốn 13.300 tỷ. Hoàn thành 2025-2027. Đón tàu 160.000 DWT.", connection: "Cao tốc Hà Nội - Hải Phòng & Đường sắt Lào Cai - Hải Phòng", details: "Cửa ngõ container nước sâu trọng điểm. Dự án bến 3, 4 (Cảng Hải Phòng) và bến 5, 6 (Hateco) đang thi công thần tốc." },
+                        { name: "Siêu cảng Nam Đồ Sơn", type: "port", info: "Vốn đầu tư >14 tỷ USD. Tầm nhìn 42 triệu TEU/năm.", connection: "Trục ven biển Quy Nhơn - Hải Phòng - Thái Bình", details: "Cảng cửa ngõ quốc tế thế hệ mới, định hướng trung chuyển quốc tế tầm cỡ khu vực." }
+                    ]
+                },
+                {
+                    id: "central",
+                    name: "Hành lang miền Trung",
+                    color: "#10b981",
+                    projects: [
+                        { name: "Cảng Liên Chiểu & FTZ", type: "ftz", info: "Vốn 1.74 tỷ USD. Cửa ngõ Hành lang Đông - Tây.", connection: "Hành lang kinh tế Đông - Tây (EWEC)", details: "Hạt nhân hình thành Khu thương mại tự do Đà Nẵng, trung tâm trung chuyển và logistics mới của miền Trung." },
+                        { name: "Logistics Chu Lai", type: "ftz", info: "Thủ phủ logistics ô tô. Kết nối hạ Lào.", connection: "Cao tốc Đà Nẵng - Quãng Ngãi & Cửa khẩu Nam Giang", details: "Trung tâm logistics đa phương thức phục vụ chuỗi cung ứng ô tô và xuất khẩu hàng hóa khu vực Nam Lào." },
+                        { name: "Cảng Quy Nhơn", type: "port", info: "Nâng công suất 18 triệu tấn/năm.", connection: "Quốc lộ 19 & Vùng Tây Nguyên", details: "Cửa ngõ xuất khẩu nông lâm sản thế mạnh của vùng Tây Nguyên ra thị trường quốc tế." }
+                    ]
+                },
+                {
+                    id: "south",
+                    name: "Hành lang miền Nam",
+                    color: "#1e3a8a",
+                    projects: [
+                        { name: "Sân bay Long Thành", type: "airport", info: "GĐ1: 2026. Công suất 25 triệu khách/năm.", connection: "Cao tốc LT-DG & Biên Hòa - Vũng Tàu", details: "Trung tâm hàng không chiến lược khu vực, thúc đẩy mạnh mẽ logistics hàng không và công nghệ cao." },
+                        { name: "Siêu cảng Cần Giờ", type: "port", info: "Vốn 4.8 tỷ USD. Liên doanh MSC (Thụy Sỹ).", connection: "Đường liên cảng & Vành đai 4", details: "Cảng trung chuyển quốc tế trọng điểm của TP.HCM, nâng cao năng lực cạnh tranh hàng hải quốc gia." },
+                        { name: "Cái Mép Hạ (Trung tâm FTZ)", type: "ftz", info: "Công suất 10.8tr TEU. Top 20 cảng thế giới.", connection: "Đường sắt cảng & Cao tốc Biên Hòa - Vũng Tàu", details: "Khu thương mại tự do lớn nhất cả nước, điểm kết nối tàu mẹ đi thẳng thị trường Âu - Mỹ." }
+                    ]
+                }
+            ];
+
+            const getTypeColor = (type) => {
+                if (type === 'airport') return '#10b981';
+                if (type === 'ftz') return '#f97316';
+                return '#1e3a8a';
+            };
+
+            const getIcon = (type) => {
+                if (type === 'airport') return <PlaneIcon />;
+                if (type === 'ftz') return <FTZIcon />;
+                return <ShipIcon />;
+            };
+
+            return (
+                <div className="max-w-[1440px] mx-auto p-12 min-h-screen bg-white shadow-2xl">
+                    {/* Header */}
+                    <header className="mb-12 border-b-[8px] border-slate-900 pb-8 flex flex-col md:flex-row justify-between items-end">
+                        <div className="text-left">
+                            <h1 className="text-[42px] font-black text-slate-900 uppercase leading-none mb-4">
+                                HẠ TẦNG LOGISTICS VIỆT NAM <span className="text-orange-600">2030</span>
+                            </h1>
+                            <p className="text-size-detail font-bold text-slate-400 uppercase tracking-[4px]">
+                                KẾT NỐI ĐA PHƯƠNG THỨC & CHIẾN LƯỢC QUỐC GIA
+                            </p>
+                        </div>
+                        <div className="flex gap-6 mt-6 md:mt-0">
+                             <div className="flex items-center gap-2 font-black text-[12px] uppercase text-slate-500 border-r pr-6 border-slate-200">
+                                <div className="w-4 h-4 bg-[#1e3a8a] rounded-sm"></div> Cảng biển
+                             </div>
+                             <div className="flex items-center gap-2 font-black text-[12px] uppercase text-slate-500 border-r pr-6 border-slate-200">
+                                <div className="w-4 h-4 bg-[#f97316] rounded-sm"></div> Vùng FTZ
+                             </div>
+                             <div className="flex items-center gap-2 font-black text-[12px] uppercase text-slate-500">
+                                <div className="w-4 h-4 bg-[#10b981] rounded-sm"></div> Sân bay
+
+                             </div>
+                        </div>
+                    </header>
+
+                    {/* Forced 3-Column Content for Desktop */}
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-10 items-start">
+                        {regions.map((region) => (
+                            <div key={region.id} className="flex flex-col gap-8">
+                                {/* Region Title - 21pt */}
+                                <div className="flex items-center gap-4 border-b-4 pb-4" style={{borderColor: region.color}}>
+                                    <h2 className="text-size-region uppercase tracking-tight" style={{color: region.color}}>
+                                        {region.name}
+                                    </h2>
+                                </div>
+
+                                <div className="space-y-8">
+                                    {region.projects.map((p, pIdx) => (
+                                        <div 
+                                            key={pIdx}
+                                            onClick={() => setSelectedProject(p)}
+                                            className="bg-slate-50 p-8 rounded-[40px] border-left-custom shadow-sm hover:shadow-2xl transition-all cursor-pointer group relative border border-slate-100"
+                                            style={{ borderLeftColor: getTypeColor(p.type) }}
+                                        >
+                                            <div 
+                                                className="absolute top-6 right-6 p-3 rounded-2xl text-white shadow-lg group-hover:rotate-12 transition-transform"
+                                                style={{ backgroundColor: getTypeColor(p.type) }}
+                                            >
+                                                {getIcon(p.type)}
+                                            </div>
+
+                                            {/* Project Title - 18pt */}
+                                            <h3 className="text-size-project uppercase mb-4 pr-12 text-slate-800 group-hover:text-orange-600 transition-colors">
+                                                {p.name}
+                                            </h3>
+
+                                            {/* Details - 12pt */}
+                                            <p className="text-size-detail text-slate-500 mb-6 font-medium leading-relaxed">
+                                                {p.info}
+                                            </p>
+                                            
+                                            {/* Connection Section - 12pt Bold */}
+                                            <div className="bg-white p-5 rounded-3xl border-2 border-dashed border-slate-300 group-hover:border-orange-400 transition-colors">
+                                                <div className="flex items-center gap-4">
+                                                    <span className="text-orange-500 bg-orange-50 p-2 rounded-xl"><LinkIcon /></span>
+                                                    <div>
+                                                        <p className="text-[10px] font-black text-slate-400 uppercase mb-1">Hạ tầng kết nối</p>
+                                                        <p className="text-size-link text-blue-900 uppercase tracking-tighter leading-tight">
+                                                            {p.connection}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* Footer Legend */}
+                    <footer className="mt-20 p-10 bg-slate-900 rounded-[48px] flex flex-col md:flex-row justify-between items-center gap-12">
+                        <div className="flex flex-wrap justify-center gap-12">
+                            <div className="flex items-center gap-4">
+                                <div className="w-8 h-8 rounded bg-[#1e3a8a] shadow-inner"></div>
+                                <span className="text-white font-black text-[14px] uppercase tracking-widest">Trục Cảng biển</span>
+                            </div>
+                            <div className="flex items-center gap-4">
+                                <div className="w-8 h-8 rounded bg-[#f97316] shadow-inner"></div>
+                                <span className="text-white font-black text-[14px] uppercase tracking-widest">Vùng kinh tế FTZ</span>
+                            </div>
+                            <div className="flex items-center gap-4">
+                                <div className="w-8 h-8 rounded bg-[#10b981] shadow-inner"></div>
+                                <span className="text-white font-black text-[14px] uppercase tracking-widest">Nút Sân bay</span>
+                            </div>
+                            <div className="flex items-center gap-4">
+                                <div className="w-10 h-10 border-2 border-dashed border-slate-400 rounded-xl flex items-center justify-center text-orange-500 bg-white/5">
+                                    <LinkIcon />
+                                </div>
+                                <span className="text-white font-black text-[14px] uppercase tracking-widest">Hệ thống Kết nối</span>
+                            </div>
+                        </div>
+                        <div className="text-right border-l-4 border-orange-500 pl-10 py-2">
+                            <span className="text-orange-500 font-black text-[18px] italic uppercase tracking-wider">VIETNAM LOGISTICS 2030</span>
+                        </div>
+                    </footer>
+
+                    {/* Modal Popup */}
+                    {selectedProject && (
+                        <div className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-slate-900/90 backdrop-blur-2xl modal-fade-in">
+                            <div className="bg-white rounded-[64px] w-full max-w-2xl overflow-hidden shadow-2xl modal-zoom-in">
+                                <div className="p-12 text-white flex justify-between items-center" style={{ backgroundColor: getTypeColor(selectedProject.type) }}>
+                                    <h3 className="text-[32px] font-black uppercase tracking-tight">{selectedProject.name}</h3>
+                                    <button onClick={() => setSelectedProject(null)} className="bg-white/20 hover:bg-white/40 w-16 h-16 rounded-full flex items-center justify-center text-4xl">&times;</button>
+                                </div>
+                                <div className="p-16">
+                                    <p className="text-[22px] font-bold text-slate-700 leading-relaxed mb-10 italic border-l-[10px] border-orange-500 pl-8">
+                                        "{selectedProject.details}"
+                                    </p>
+                                    <div className="bg-slate-50 p-8 rounded-[32px] flex flex-col gap-4 border-2 border-dashed border-slate-200">
+                                        <div className="flex items-center gap-4 text-orange-600">
+                                            <LinkIcon /> <span className="font-black text-xs uppercase tracking-widest">Quy hoạch kết nối đa phương thức</span>
+                                        </div>
+                                        <p className="text-[20px] font-black text-blue-900 uppercase">{selectedProject.connection}</p>
+                                    </div>
+                                    <button onClick={() => setSelectedProject(null)} className="w-full mt-10 py-6 bg-slate-900 text-white font-black rounded-[28px] hover:bg-orange-600 transition-all uppercase tracking-[8px] text-[18px]">ĐÓNG CHI TIẾT</button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
